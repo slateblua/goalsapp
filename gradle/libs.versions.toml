@@ -1,13 +1,39 @@
 [versions]
 agp = "8.7.3"
-kotlin = "2.0.0"
-coreKtx = "1.15.0"
+#noinspection GradleDependency
+kotlin = "2.0.20"
+#noinspection GradleDependency
+coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
-composeBom = "2024.04.01"
+composeBom = "2024.12.01"
+
+# ksp
+google-ksp = "2.0.20-1.0.25"
+
+# kotlin
+jetbrainsKotlinJvm = "2.0.20"
+
+# koin
+koin = "4.0.0"
+koin-compose = "4.0.0"
+
+# coroutines
+kotlinxCoroutinesAndroid = "1.9.0"
+
+# navigation
+navigationCompose = "2.8.5"
+
+# room
+roomCompiler = "2.6.1"
+roomKtx = "2.6.1"
+roomRuntime = "2.6.1"
+roomTesting = "2.6.1"
+appcompat = "1.7.0"
+material = "1.12.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -25,8 +51,34 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
+# coroutines
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+
+# room
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "roomTesting" }
+
+# koin
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = 'koin' }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = 'koin' }
+koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = 'koin' }
+koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = 'koin-compose' }
+koin-compose-viewmodel  = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = 'koin-compose' }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
+android-library = { id = "com.android.library", version.ref = "agp" }
+google-ksp = { id = "com.google.devtools.ksp", version.ref = "google-ksp" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
