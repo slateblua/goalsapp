@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.bluesourceplus.bluedays.ui.theme.BluedaysTheme
+import com.bluesourceplus.bluedays.composables.BluedaysTheme
 
 class BlueDays : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

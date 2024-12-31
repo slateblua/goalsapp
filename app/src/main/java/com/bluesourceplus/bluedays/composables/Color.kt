@@ -1,4 +1,4 @@
-package com.bluesourceplus.bluedays.ui.theme
+package com.bluesourceplus.bluedays.composables
 
 import androidx.compose.ui.graphics.Color
 
