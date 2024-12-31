@@ -49,7 +49,7 @@ fun BlueDaysScreensHost(
             .fillMaxSize(),
     ) {
         appScreen(Destination.Home) {
-            HomeScreenRoute()
+            HomeScreenRoute(onAddButton = { navController.navigate(CREATE_SCREEN_ROUTE) })
         }
 
         appScreen(Destination.Preferences) {
