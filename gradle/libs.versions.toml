@@ -70,8 +70,6 @@ koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = 
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = 'koin' }
 koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = 'koin-compose' }
 koin-compose-viewmodel  = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = 'koin-compose' }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
