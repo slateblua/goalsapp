@@ -53,7 +53,7 @@ fun BlueDaysScreensHost(
         }
 
         appScreen(Destination.Preferences) {
-            PreferencesScreenRoute()
+            PreferencesScreenRoute(back = navController::popBackStack)
         }
 
         appScreen(Destination.Create) {
