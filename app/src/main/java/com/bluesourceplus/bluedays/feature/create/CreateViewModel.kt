@@ -5,8 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.bluesourceplus.bluedays.data.GoalModel
 import com.bluesourceplus.bluedays.feature.create.usecases.AddGoalUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -34,6 +37,9 @@ sealed interface State {
 
 class CreateViewModel : ViewModel(), KoinComponent {
     private val addGoalUseCase: AddGoalUseCase by inject()
+
+    private val backNavigationEventChannel = Channel<Unit>(Channel.BUFFERED)
+    val backNavigationEvent: Flow<Unit> = backNavigationEventChannel.receiveAsFlow()
 
     private val _state =
         MutableStateFlow<State>(
@@ -71,6 +77,7 @@ class CreateViewModel : ViewModel(), KoinComponent {
                     description = state.description,
                 )
             addGoalUseCase(goal)
+            backNavigationEventChannel.send(Unit)
         }
     }
 }
