@@ -34,6 +34,7 @@ roomRuntime = "2.6.1"
 roomTesting = "2.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
+datastorePreferencesCoreJvm = "1.1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -70,6 +71,7 @@ koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = 
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = 'koin' }
 koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = 'koin-compose' }
 koin-compose-viewmodel  = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = 'koin-compose' }
+androidx-datastore-preferences-core-jvm = { group = "androidx.datastore", name = "datastore-preferences-core-jvm", version.ref = "datastorePreferencesCoreJvm" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
