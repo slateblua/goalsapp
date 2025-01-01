@@ -57,7 +57,7 @@ fun BlueDaysScreensHost(
         }
 
         appScreen(Destination.Create) {
-            CreateScreenRoute()
+            CreateScreenRoute(back = navController::popBackStack)
         }
     }
 }
