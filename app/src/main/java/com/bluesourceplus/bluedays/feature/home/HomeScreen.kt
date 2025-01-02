@@ -126,7 +126,7 @@ fun GoalCard(
                         modifier = Modifier
                             .align(Alignment.End)
                             .background(
-                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                color = MaterialTheme.colorScheme.surfaceVariant,
                                 shape = RoundedCornerShape(20.dp)
                             )
                     ) {
