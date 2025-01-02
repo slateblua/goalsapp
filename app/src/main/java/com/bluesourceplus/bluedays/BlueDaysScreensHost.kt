@@ -1,19 +1,16 @@
 package com.bluesourceplus.bluedays
 
 import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -68,8 +65,7 @@ internal fun BottomBar(navController: NavController) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 20.dp, horizontal = 40.dp)
-            .background(color = MaterialTheme.colorScheme.onBackground, shape = RoundedCornerShape(60.dp)))
-    {
+    ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
 
@@ -77,13 +73,13 @@ internal fun BottomBar(navController: NavController) {
             rootScreen = Destination.Home,
             currentDestination = currentDestination,
             navController = navController,
-            content = { Icon(imageVector = Icons.Default.Home, contentDescription = stringResource(R.string.home_button_content_description), tint = MaterialTheme.colorScheme.onSecondaryContainer) },
+            content = { Icon(imageVector = Icons.Default.Home, contentDescription = stringResource(R.string.home_button_content_description)) },
         )
         AppNavigationItem(
             rootScreen = Destination.Preferences,
             currentDestination = currentDestination,
             navController = navController,
-            content = { Icon(imageVector = Icons.Default.Settings, contentDescription = stringResource(R.string.preferences_button_content_description), tint = MaterialTheme.colorScheme.onSecondaryContainer) },
+            content = { Icon(imageVector = Icons.Default.Settings, contentDescription = stringResource(R.string.preferences_button_content_description)) },
         )
     }
 }
