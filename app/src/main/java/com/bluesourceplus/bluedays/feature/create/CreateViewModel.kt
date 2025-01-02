@@ -16,6 +16,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.todayIn
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -28,6 +29,10 @@ sealed interface Event {
         val description: String,
     ) : Event
 
+    data class OnDueDateChanged(
+        val dueDate: LocalDate,
+    ) : Event
+
     data object OnSaveClicked : Event
 }
 
@@ -36,7 +41,7 @@ sealed interface State {
         val id: Int = 0,
         val title: String = "",
         val description: String = "",
-        val dueDate: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val dueDate: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
     ) : State
 }
 
@@ -57,6 +62,13 @@ class CreateViewModel : ViewModel(), KoinComponent {
             is Event.OnTitleChanged -> setTitle(event.title)
             is Event.OnDescriptionChanged -> setDescription(event.description)
             is Event.OnSaveClicked -> addOrUpdateNote()
+            is Event.OnDueDateChanged -> setDueDate(event.dueDate)
+        }
+    }
+
+    private fun setDueDate(dueDate: LocalDate) {
+        _state.update {
+            (it as State.Content).copy(dueDate = dueDate)
         }
     }
 
