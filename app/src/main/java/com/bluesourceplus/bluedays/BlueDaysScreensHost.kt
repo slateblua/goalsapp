@@ -1,6 +1,12 @@
 package com.bluesourceplus.bluedays
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -8,15 +14,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.rounded.AccountTree
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
@@ -61,10 +73,9 @@ fun BlueDaysScreensHost(
 
 @Composable
 internal fun BottomBar(navController: NavController) {
-    Row (
+    BottomAppBar(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 20.dp, horizontal = 40.dp)
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
@@ -74,12 +85,14 @@ internal fun BottomBar(navController: NavController) {
             currentDestination = currentDestination,
             navController = navController,
             content = { Icon(imageVector = Icons.Default.Home, contentDescription = stringResource(R.string.home_button_content_description)) },
+            title = "Home",
         )
         AppNavigationItem(
             rootScreen = Destination.Preferences,
             currentDestination = currentDestination,
             navController = navController,
             content = { Icon(imageVector = Icons.Default.Settings, contentDescription = stringResource(R.string.preferences_button_content_description)) },
+            title = "Settings",
         )
     }
 }
@@ -90,9 +103,11 @@ private fun RowScope.AppNavigationItem(
     currentDestination: NavDestination?,
     navController: NavController,
     content: @Composable () -> Unit,
+    title: String,
 ) {
+    val selected = currentDestination?.hierarchy?.any { it.route == rootScreen.route } == true
     NavigationBarItem(
-        selected = currentDestination?.hierarchy?.any { it.route == rootScreen.route } == true,
+        selected = selected,
         onClick = {
             navController.navigate(rootScreen.route) {
                 popUpTo(navController.graph.findStartDestination().id)
@@ -100,6 +115,21 @@ private fun RowScope.AppNavigationItem(
             }
         },
         icon = content,
+        label = {
+            AnimatedVisibility(
+                visible = selected,
+                enter = expandHorizontally(
+                    expandFrom = Alignment.Start,
+                    animationSpec = tween(durationMillis = 300)
+                ) + fadeIn(animationSpec = tween(durationMillis = 300)),
+                exit = shrinkHorizontally(
+                    shrinkTowards = Alignment.Start,
+                    animationSpec = tween(durationMillis = 300)
+                ) + fadeOut(animationSpec = tween(durationMillis = 300))
+            ) {
+                Text(text = title, fontSize = 12.sp)
+            }
+        }
     )
 }
 

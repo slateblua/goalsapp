@@ -13,12 +13,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,7 +34,9 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import kotlinx.coroutines.flow.Flow
+import kotlinx.datetime.LocalDate
 import org.koin.androidx.compose.koinViewModel
+import java.util.Locale
 
 
 @SuppressLint("ComposableNaming")
@@ -60,6 +65,10 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
     val state by createViewModel.state.collectAsStateWithLifecycle()
 
     val canBeCreated = remember { mutableStateOf(true) }
+
+    val shouldShowDate = remember { mutableStateOf(false) }
+
+    val dateState = rememberDatePickerState()
 
     createViewModel.backNavigationEvent.asEffect { back() }
 
@@ -105,6 +114,16 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
 
             Button(
                 onClick = {
+                    shouldShowDate.value = true
+                },
+                modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(10.dp)) {
+                Text(text = customFormat((state as State.Content).dueDate))
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Button(
+                onClick = {
                     if ((state as State.Content).title.isEmpty()) {
                         canBeCreated.value = false
                     } else {
@@ -114,6 +133,39 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(10.dp)) {
                 Text(text = "Save")
             }
+
+            val selectedDate = dateState.selectedDateMillis?.let {
+                LocalDate.fromEpochDays((it / (24 * 60 * 60 * 1000)).toInt())
+            }
+
+            if (shouldShowDate.value) {
+                DatePickerDialog(
+                    onDismissRequest = {
+                        shouldShowDate.value = false
+                    },
+                    confirmButton = {
+                        Button(onClick = {
+                            shouldShowDate.value = false
+                            selectedDate?.let {
+                                createViewModel.handleEvent(Event.OnDueDateChanged(dueDate = selectedDate))
+                            }
+                        }, modifier = Modifier.fillMaxWidth().padding(20.dp), shape = RoundedCornerShape(10.dp)) {
+                            Text(text = "Confirm")
+                        }
+                    },
+                ) {
+                    DatePicker(state = dateState)
+                }
+            }
         }
     }
+}
+
+fun customFormat(date: LocalDate): String {
+    val day = date.dayOfMonth
+    val month =
+        date.month.name.lowercase()
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+    val year = date.year
+    return "$day $month $year"
 }
