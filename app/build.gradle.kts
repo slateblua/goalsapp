@@ -76,4 +76,6 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.androidx.compose)
     implementation(libs.koin.compose.viewmodel)
+
+    implementation(libs.kotlinx.datetime)
 }
