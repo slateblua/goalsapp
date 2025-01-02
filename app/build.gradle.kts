@@ -78,4 +78,6 @@ dependencies {
     implementation(libs.koin.compose.viewmodel)
 
     implementation(libs.kotlinx.datetime)
+
+    implementation(libs.androidx.material.icons.extended.android)
 }
