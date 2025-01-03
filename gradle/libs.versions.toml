@@ -16,7 +16,7 @@ composeBom = "2024.12.01"
 google-ksp = "2.0.20-1.0.25"
 
 # kotlin
-jetbrainsKotlinJvm = "2.0.20"
+jetbrainsKotlinJvm = "2.0.0"
 
 # koin
 koin = "4.0.0"
