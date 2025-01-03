@@ -6,7 +6,6 @@ import com.bluesourceplus.bluedays.data.GoalModel
 import com.bluesourceplus.bluedays.feature.create.usecases.AddGoalUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -44,11 +43,17 @@ sealed interface State {
     ) : State
 }
 
+sealed class Effect {
+    data object TaskSaved : Effect()
+    data object NavigateUp : Effect()
+}
+
 class CreateViewModel : ViewModel(), KoinComponent {
     private val addGoalUseCase: AddGoalUseCase by inject()
 
-    private val backNavigationEventChannel = Channel<Unit>(Channel.BUFFERED)
-    val backNavigationEvent: Flow<Unit> = backNavigationEventChannel.receiveAsFlow()
+
+    private val _sideEffect = Channel<Effect>()
+    val sideEffect = _sideEffect.receiveAsFlow()
 
     private val _state =
         MutableStateFlow<State>(
@@ -94,7 +99,9 @@ class CreateViewModel : ViewModel(), KoinComponent {
                     dueDate = state.dueDate
                 )
             addGoalUseCase(goal)
-            backNavigationEventChannel.send(Unit)
+
+            _sideEffect.send(Effect.TaskSaved)
+            _sideEffect.send(Effect.NavigateUp)
         }
     }
 }

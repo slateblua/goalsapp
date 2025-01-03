@@ -1,6 +1,5 @@
 package com.bluesourceplus.bluedays.feature.create
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,32 +26,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.flowWithLifecycle
-import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
 import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
-
-
-@SuppressLint("ComposableNaming")
-@Composable
-fun <T> Flow<T>.asEffect(action: (T) -> Unit) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val lifecycleAwareFlow = remember(this, lifecycleOwner) {
-        this.flowWithLifecycle(lifecycleOwner.lifecycle)
-    }
-
-    val currentAction by rememberUpdatedState(action)
-
-    LaunchedEffect(this, lifecycleOwner) {
-        lifecycleAwareFlow.collect { currentAction(it) }
-    }
-}
 
 @Composable
 fun CreateScreenRoute(createViewModel: CreateViewModel = koinViewModel(), back: () -> Unit) {
@@ -70,8 +49,19 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
 
     val dateState = rememberDatePickerState()
 
-    createViewModel.backNavigationEvent.asEffect { back() }
-
+    // Collect side effects
+    LaunchedEffect(Unit) {
+        createViewModel.sideEffect.collect { effect ->
+            when (effect) {
+                Effect.TaskSaved -> {
+                    // empty for now
+                }
+                Effect.NavigateUp -> {
+                    back()
+                }
+            }
+        }
+    }
     Column(modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.background).padding()) {
         CenterAlignedTopAppBar(
             title = { Text(text = "Create")},
