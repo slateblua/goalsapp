@@ -2,22 +2,19 @@ package com.bluesourceplus.bluedays
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.rounded.AccountTree
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
@@ -27,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
@@ -84,15 +80,17 @@ internal fun BottomBar(navController: NavController) {
             rootScreen = Destination.Home,
             currentDestination = currentDestination,
             navController = navController,
-            content = { Icon(imageVector = Icons.Default.Home, contentDescription = stringResource(R.string.home_button_content_description)) },
+            usualIcon = { Icon(imageVector = Icons.Outlined.Home, contentDescription = stringResource(R.string.home_button_content_description)) },
+            selectedIcon = { Icon(imageVector = Icons.Filled.Home, contentDescription = stringResource(R.string.preferences_button_content_description)) },
             title = "Home",
         )
         AppNavigationItem(
             rootScreen = Destination.Preferences,
             currentDestination = currentDestination,
             navController = navController,
-            content = { Icon(imageVector = Icons.Default.Settings, contentDescription = stringResource(R.string.preferences_button_content_description)) },
-            title = "Settings",
+            usualIcon = { Icon(imageVector = Icons.Outlined.Settings, contentDescription = stringResource(R.string.preferences_button_content_description)) },
+            selectedIcon = { Icon(imageVector = Icons.Filled.Settings, contentDescription = stringResource(R.string.preferences_button_content_description)) },
+            title = "Preferences",
         )
     }
 }
@@ -102,7 +100,8 @@ private fun RowScope.AppNavigationItem(
     rootScreen: Screen,
     currentDestination: NavDestination?,
     navController: NavController,
-    content: @Composable () -> Unit,
+    usualIcon: @Composable () -> Unit,
+    selectedIcon: @Composable () -> Unit = usualIcon,
     title: String,
 ) {
     val selected = currentDestination?.hierarchy?.any { it.route == rootScreen.route } == true
@@ -114,22 +113,23 @@ private fun RowScope.AppNavigationItem(
                 launchSingleTop = true
             }
         },
-        icon = content,
+        icon = if (selected) selectedIcon else usualIcon,
+        alwaysShowLabel = false,
         label = {
             AnimatedVisibility(
                 visible = selected,
-                enter = expandHorizontally(
-                    expandFrom = Alignment.Start,
-                    animationSpec = tween(durationMillis = 300)
-                ) + fadeIn(animationSpec = tween(durationMillis = 300)),
-                exit = shrinkHorizontally(
-                    shrinkTowards = Alignment.Start,
-                    animationSpec = tween(durationMillis = 300)
-                ) + fadeOut(animationSpec = tween(durationMillis = 300))
+                enter = expandVertically(
+                    expandFrom = Alignment.Bottom,
+                    animationSpec = spring()
+                ),
+                exit = shrinkVertically(
+                    shrinkTowards = Alignment.Top,
+                    animationSpec = spring()
+                )
             ) {
                 Text(text = title, fontSize = 12.sp)
             }
-        }
+        },
     )
 }
 
