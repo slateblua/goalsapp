@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DatePicker
@@ -69,6 +70,17 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
                 IconButton(onClick = back) {
                     Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                 }
+            },
+            actions = {
+                IconButton(onClick = {
+                    if ((state as State.Content).title.isEmpty()) {
+                        canBeCreated.value = false
+                    } else {
+                        createViewModel.handleEvent(Event.OnSaveClicked)
+                    }
+                }) {
+                    Icon(imageVector = Icons.Default.Check, contentDescription = "Save")
+                }
             }
         )
         Column (modifier = Modifier.fillMaxWidth().padding(20.dp)) {
@@ -84,12 +96,6 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            if (!canBeCreated.value) {
-                Text(text = "Please enter a title", color = MaterialTheme.colorScheme.onBackground)
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
             OutlinedTextField(
                 placeholder = { Text("Why do you want to achieve it?") },
                 modifier = Modifier.fillMaxWidth().height(120.dp),
@@ -102,26 +108,14 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
+            val dueDate = customFormat((state as State.Content).dueDate)
+
             Button(
                 onClick = {
                     shouldShowDate.value = true
                 },
                 modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(10.dp)) {
-                Text(text = customFormat((state as State.Content).dueDate))
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Button(
-                onClick = {
-                    if ((state as State.Content).title.isEmpty()) {
-                        canBeCreated.value = false
-                    } else {
-                        createViewModel.handleEvent(Event.OnSaveClicked)
-                    }
-                },
-                modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(10.dp)) {
-                Text(text = "Save")
+                Text(text = "Due $dueDate")
             }
 
             val selectedDate = dateState.selectedDateMillis?.let {
@@ -139,10 +133,17 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
                             selectedDate?.let {
                                 createViewModel.handleEvent(Event.OnDueDateChanged(dueDate = selectedDate))
                             }
-                        }, modifier = Modifier.fillMaxWidth().padding(20.dp), shape = RoundedCornerShape(10.dp)) {
-                            Text(text = "Confirm")
+                        }, shape = RoundedCornerShape(20.dp)) {
+                            Text(text = "Ok")
                         }
                     },
+                    dismissButton = {
+                        Button(onClick = {
+                            shouldShowDate.value = false
+                        }, shape = RoundedCornerShape(20.dp)) {
+                            Text(text = "Cancel")
+                        }
+                    }
                 ) {
                     DatePicker(state = dateState)
                 }
