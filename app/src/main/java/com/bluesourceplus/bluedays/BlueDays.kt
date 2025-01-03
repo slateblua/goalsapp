@@ -14,30 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.bluesourceplus.bluedays.composables.BluedaysTheme
-import com.bluesourceplus.bluedays.data.database.module.dataModule
-import com.bluesourceplus.bluedays.feature.create.module.createModule
-import com.bluesourceplus.bluedays.feature.home.module.homeModule
-import com.bluesourceplus.bluedays.feature.preferences.module.preferencesModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
 import org.koin.compose.KoinContext
-import org.koin.core.context.startKoin
 
 class BlueDays : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        startKoin {
-            androidContext(this@BlueDays)
-            androidLogger()
-            modules(
-                homeModule,
-                dataModule,
-                createModule,
-                preferencesModule
-            )
-        }
 
         setContent {
             BluedaysTheme {
