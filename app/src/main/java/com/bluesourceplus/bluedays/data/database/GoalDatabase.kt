@@ -1,8 +1,6 @@
 package com.bluesourceplus.bluedays.data.database
 
 import androidx.room.Database
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
@@ -13,15 +11,6 @@ import kotlinx.datetime.LocalDate
 abstract class GoalDatabase : RoomDatabase() {
     abstract fun getGoalDao(): GoalDao
 }
-
-@Entity
-data class GoalEnt(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val title: String,
-    val description: String,
-    val dueDate: LocalDate,
-)
 
 class LocalDateConverters {
     @TypeConverter

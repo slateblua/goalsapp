@@ -8,6 +8,7 @@ fun GoalModel.toGoalEnt(): GoalEnt {
         title = this.title,
         description = this.description,
         dueDate = this.dueDate,
+        completed = this.completed,
     )
 }
 
@@ -16,6 +17,7 @@ fun GoalEnt.toGoalModel(): GoalModel {
         id = this.id,
         title = this.title,
         description = this.description,
-        dueDate = this.dueDate
+        dueDate = this.dueDate,
+        completed = this.completed,
     )
 }

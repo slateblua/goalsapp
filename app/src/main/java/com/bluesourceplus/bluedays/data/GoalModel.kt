@@ -9,4 +9,5 @@ data class GoalModel(
     val title: String,
     val description: String,
     val dueDate: LocalDate,
+    val completed: Boolean,
 )

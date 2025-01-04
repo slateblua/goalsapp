@@ -22,6 +22,7 @@ import androidx.compose.material.icons.twotone.AddCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,6 +30,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -45,12 +49,12 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreenRoute(viewModel: HomeViewModel = koinViewModel(), onAddButton: () -> Unit) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    HomeScreen(onAddButton = onAddButton, state = state)
+    HomeScreen(onAddButton = onAddButton, onChecked = { viewModel.handleEvent(Event.OnMarkedCompleted(it)) }, state = state)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(onAddButton: () -> Unit, state: State) {
+fun HomeScreen(onAddButton: () -> Unit, onChecked: (GoalModel) -> Unit, state: State) {
     Column(modifier = Modifier
         .fillMaxSize()
         .background(color = MaterialTheme.colorScheme.background)) {
@@ -74,6 +78,7 @@ fun HomeScreen(onAddButton: () -> Unit, state: State) {
                         GoalCard(
                             modifier = Modifier.padding(5.dp),
                             goal = goal,
+                            onChecked = onChecked
                         )
                     }
                 }
@@ -90,6 +95,7 @@ fun HomeScreen(onAddButton: () -> Unit, state: State) {
 fun GoalCard(
     modifier: Modifier = Modifier,
     goal: GoalModel,
+    onChecked: (GoalModel) -> Unit,
 ) {
     Card(
         modifier = modifier
@@ -149,8 +155,13 @@ fun GoalCard(
                     }
                 }
             }
+
+            Checkbox(modifier = Modifier.align(Alignment.BottomStart), checked = goal.completed, onCheckedChange = { onChecked(goal) })
+
             IconButton(
-                onClick = { },
+                onClick = {
+
+                },
                 modifier = Modifier.align(Alignment.TopEnd)
             ) {
                 Icon(

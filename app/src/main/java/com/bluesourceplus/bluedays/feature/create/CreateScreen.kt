@@ -27,6 +27,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -44,9 +45,9 @@ fun CreateScreenRoute(createViewModel: CreateViewModel = koinViewModel(), back: 
 fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
     val state by createViewModel.state.collectAsStateWithLifecycle()
 
-    val canBeCreated = remember { mutableStateOf(true) }
+    var canBeCreated by remember { mutableStateOf(true) }
 
-    val shouldShowDate = remember { mutableStateOf(false) }
+    var shouldShowDate by remember { mutableStateOf(false) }
 
     val dateState = rememberDatePickerState()
 
@@ -74,7 +75,7 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
             actions = {
                 IconButton(onClick = {
                     if ((state as State.Content).title.isEmpty()) {
-                        canBeCreated.value = false
+                        canBeCreated = false
                     } else {
                         createViewModel.handleEvent(Event.OnSaveClicked)
                     }
@@ -112,7 +113,7 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
 
             Button(
                 onClick = {
-                    shouldShowDate.value = true
+                    shouldShowDate = true
                 },
                 modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(10.dp)) {
                 Text(text = "Due $dueDate")
@@ -122,14 +123,14 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
                 LocalDate.fromEpochDays((it / (24 * 60 * 60 * 1000)).toInt())
             }
 
-            if (shouldShowDate.value) {
+            if (shouldShowDate) {
                 DatePickerDialog(
                     onDismissRequest = {
-                        shouldShowDate.value = false
+                        shouldShowDate = false
                     },
                     confirmButton = {
                         Button(onClick = {
-                            shouldShowDate.value = false
+                            shouldShowDate = false
                             selectedDate?.let {
                                 createViewModel.handleEvent(Event.OnDueDateChanged(dueDate = selectedDate))
                             }
@@ -139,7 +140,7 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
                     },
                     dismissButton = {
                         Button(onClick = {
-                            shouldShowDate.value = false
+                            shouldShowDate = false
                         }, shape = RoundedCornerShape(20.dp)) {
                             Text(text = "Cancel")
                         }
