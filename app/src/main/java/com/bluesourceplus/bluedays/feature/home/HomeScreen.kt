@@ -109,7 +109,7 @@ fun GoalCard(
                 ) {
                     Text(
                         text = goal.title,
-                        style = MaterialTheme.typography.headlineMedium,
+                        style = MaterialTheme.typography.headlineSmall,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -118,7 +118,7 @@ fun GoalCard(
 
                     Text(
                         text = goal.description,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodySmall,
                         maxLines = 3,
                         overflow = TextOverflow.Ellipsis
                     )
