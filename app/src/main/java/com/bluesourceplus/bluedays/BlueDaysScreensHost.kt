@@ -36,6 +36,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.bluesourceplus.bluedays.feature.aboutscreen.AboutScreenRoute
 import com.bluesourceplus.bluedays.feature.create.CreateScreenRoute
 import com.bluesourceplus.bluedays.feature.home.HomeScreenRoute
 import com.bluesourceplus.bluedays.feature.preferences.PreferencesScreenRoute
@@ -58,11 +59,11 @@ fun BlueDaysScreensHost(
         }
 
         appScreen(Destination.Preferences) {
-            PreferencesScreenRoute(back = navController::popBackStack)
+            PreferencesScreenRoute(back = navController::popBackStack, onAbout = { navController.navigate(ABOUT_SCREEN_ROUTE)})
         }
 
-        appScreen(Destination.Create) {
-            CreateScreenRoute(back = navController::popBackStack)
+        appScreen(Destination.About) {
+            AboutScreenRoute()
         }
     }
 }
@@ -153,6 +154,10 @@ const val CREATE_SCREEN_ROUTE = "create"
 const val HOME_SCREEN_ROUTE = "home"
 const val PREFERENCES_SCREEN_ROUTE = "preferences"
 
+const val ABOUT_SCREEN_ROUTE = "about"
+
+const val ABOUT_GOAL_SCREEN_ROUT = "about_goal"
+
 object Destination {
     data object Create : Screen(
         route = CREATE_SCREEN_ROUTE,
@@ -164,5 +169,13 @@ object Destination {
 
     data object Preferences : Screen(
         route = PREFERENCES_SCREEN_ROUTE,
+    )
+
+    data object About : Screen(
+        route = ABOUT_SCREEN_ROUTE,
+    )
+
+    data object AboutGoal : Screen(
+        route = ABOUT_GOAL_SCREEN_ROUT,
     )
 }

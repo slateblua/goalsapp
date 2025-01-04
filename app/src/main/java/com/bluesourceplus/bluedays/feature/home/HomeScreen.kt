@@ -171,18 +171,16 @@ fun HomeEmptyContent(
     onCreateButtonClicked: () -> Unit,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
-        Column(modifier = modifier.align(Alignment.Center)) {
+        Column(modifier = modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = "You don't have anything here yet!",
                 color = MaterialTheme.colorScheme.primary,
                 fontSize = 22.sp,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
             )
 
             Spacer(modifier = Modifier.height(10.dp))
 
             Button(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = onCreateButtonClicked,
                 content = {
                     Text(text = "Create one now!")
