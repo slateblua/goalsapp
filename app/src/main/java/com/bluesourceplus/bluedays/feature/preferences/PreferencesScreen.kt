@@ -27,6 +27,7 @@ fun PreferencesScreenRoute(preferencesViewModel: PreferencesViewModel = koinView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@Suppress("unused")
 fun PreferencesScreen(preferencesViewModel: PreferencesViewModel, back: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.background)) {
         CenterAlignedTopAppBar(
