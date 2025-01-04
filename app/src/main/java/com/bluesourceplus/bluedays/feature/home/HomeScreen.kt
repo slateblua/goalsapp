@@ -46,12 +46,12 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreenRoute(viewModel: HomeViewModel = koinViewModel(), onAddButton: () -> Unit) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    HomeScreen(onAddButton = onAddButton, onChecked = { viewModel.handleEvent(Event.OnMarkedCompleted(it)) }, state = state)
+    HomeScreen(onAddButton = onAddButton, state = state)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(onAddButton: () -> Unit, onChecked: (GoalModel) -> Unit, state: State) {
+fun HomeScreen(onAddButton: () -> Unit, state: State) {
     Column(modifier = Modifier
         .fillMaxSize()
         .background(color = MaterialTheme.colorScheme.background)) {
@@ -75,7 +75,6 @@ fun HomeScreen(onAddButton: () -> Unit, onChecked: (GoalModel) -> Unit, state: S
                         GoalCard(
                             modifier = Modifier.padding(5.dp),
                             goal = goal,
-                            onChecked = onChecked
                         )
                     }
                 }
@@ -92,7 +91,6 @@ fun HomeScreen(onAddButton: () -> Unit, onChecked: (GoalModel) -> Unit, state: S
 fun GoalCard(
     modifier: Modifier = Modifier,
     goal: GoalModel,
-    onChecked: (GoalModel) -> Unit,
 ) {
     Card(
         modifier = modifier
@@ -152,9 +150,6 @@ fun GoalCard(
                     }
                 }
             }
-
-            Checkbox(modifier = Modifier.align(Alignment.BottomStart), checked = goal.completed, onCheckedChange = { onChecked(goal) })
-
             IconButton(
                 onClick = {
 
