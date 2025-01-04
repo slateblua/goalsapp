@@ -96,7 +96,8 @@ class CreateViewModel : ViewModel(), KoinComponent {
                     id = state.id,
                     title = state.title,
                     description = state.description,
-                    dueDate = state.dueDate
+                    dueDate = state.dueDate,
+                    completed = false
                 )
             addGoalUseCase(goal)
 
