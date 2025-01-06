@@ -1,6 +1,7 @@
 package com.bluesourceplus.bluedays.feature.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,7 +23,6 @@ import androidx.compose.material.icons.twotone.AddCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,15 +43,19 @@ import com.bluesourceplus.bluedays.feature.create.customFormat
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun HomeScreenRoute(viewModel: HomeViewModel = koinViewModel(), onAddButton: () -> Unit) {
+fun HomeScreenRoute(viewModel: HomeViewModel = koinViewModel(), onAddButton: () -> Unit, onGoalPressed: (Int) -> Unit) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    HomeScreen(onAddButton = onAddButton, state = state)
+    HomeScreen(onAddButton = onAddButton, onGoalPressed = onGoalPressed, state = state)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(onAddButton: () -> Unit, state: State) {
+fun HomeScreen(
+    onAddButton: () -> Unit,
+    onGoalPressed: (Int) -> Unit,
+    state: State,
+) {
     Column(modifier = Modifier
         .fillMaxSize()
         .background(color = MaterialTheme.colorScheme.background)) {
@@ -75,6 +79,7 @@ fun HomeScreen(onAddButton: () -> Unit, state: State) {
                         GoalCard(
                             modifier = Modifier.padding(5.dp),
                             goal = goal,
+                            onGoalPressed = onGoalPressed,
                         )
                     }
                 }
@@ -91,10 +96,12 @@ fun HomeScreen(onAddButton: () -> Unit, state: State) {
 fun GoalCard(
     modifier: Modifier = Modifier,
     goal: GoalModel,
+    onGoalPressed: (Int) -> Unit,
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onGoalPressed(goal.id) },
         shape = RoundedCornerShape(16.dp)
     ) {
         Box {

@@ -33,9 +33,12 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
+import com.bluesourceplus.bluedays.feature.aboutgoalscreen.AboutGoalRoute
 import com.bluesourceplus.bluedays.feature.aboutscreen.AboutScreenRoute
 import com.bluesourceplus.bluedays.feature.create.CreateScreenRoute
 import com.bluesourceplus.bluedays.feature.home.HomeScreenRoute
@@ -55,7 +58,20 @@ fun BlueDaysScreensHost(
             .fillMaxSize(),
     ) {
         appScreen(Destination.Home) {
-            HomeScreenRoute(onAddButton = { navController.navigate(CREATE_SCREEN_ROUTE) })
+            HomeScreenRoute(onAddButton = {
+                navController.navigate(CREATE_SCREEN_ROUTE)
+            }, onGoalPressed = {
+                navController.navigate("$ABOUT_GOAL_SCREEN_ROUTE/$it") { launchSingleTop = true }
+            })
+        }
+
+        appScreen(Destination.AboutGoal) { backStackEntry ->
+            backStackEntry.arguments?.getInt(GOAL_ID_ARG)?.let {
+                AboutGoalRoute(
+                    goalId = it,
+                    back = navController::popBackStack
+                )
+            }
         }
 
         appScreen(Destination.Preferences) {
@@ -159,10 +175,11 @@ const val HOME_SCREEN_ROUTE = "home"
 const val PREFERENCES_SCREEN_ROUTE = "preferences"
 
 const val ABOUT_SCREEN_ROUTE = "about"
-
-const val ABOUT_GOAL_SCREEN_ROUT = "about_goal"
+const val ABOUT_GOAL_SCREEN_ROUTE = "about_goal"
+const val GOAL_ID_ARG = "goal_id"
 
 object Destination {
+
     data object Create : Screen(
         route = CREATE_SCREEN_ROUTE,
     )
@@ -180,6 +197,13 @@ object Destination {
     )
 
     data object AboutGoal : Screen(
-        route = ABOUT_GOAL_SCREEN_ROUT,
+        route = "$ABOUT_GOAL_SCREEN_ROUTE/{$GOAL_ID_ARG}",
+        arguments =
+        listOf(
+            navArgument(GOAL_ID_ARG) {
+                type = NavType.IntType
+                nullable = false
+            },
+        ),
     )
 }
