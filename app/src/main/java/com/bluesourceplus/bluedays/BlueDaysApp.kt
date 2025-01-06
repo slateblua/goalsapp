@@ -2,6 +2,7 @@ package com.bluesourceplus.bluedays
 
 import android.app.Application
 import com.bluesourceplus.bluedays.data.database.module.dataModule
+import com.bluesourceplus.bluedays.feature.aboutgoalscreen.module.aboutModule
 import com.bluesourceplus.bluedays.feature.create.module.createModule
 import com.bluesourceplus.bluedays.feature.home.module.homeModule
 import com.bluesourceplus.bluedays.feature.preferences.module.preferencesModule
@@ -21,7 +22,8 @@ class BlueDaysApp : Application() {
                 homeModule,
                 dataModule,
                 createModule,
-                preferencesModule
+                preferencesModule,
+                aboutModule,
             )
         }
     }
