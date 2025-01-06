@@ -157,6 +157,7 @@ private fun RowScope.AppNavigationItem(
 sealed class Screen(
     val route: String,
     val arguments: List<NamedNavArgument> = emptyList(),
+    val hasBottomBar: Boolean = false,
 )
 
 fun NavGraphBuilder.appScreen(
@@ -178,6 +179,13 @@ const val ABOUT_SCREEN_ROUTE = "about"
 const val ABOUT_GOAL_SCREEN_ROUTE = "about_goal"
 const val GOAL_ID_ARG = "goal_id"
 
+object ShowNavBarScreens {
+    val screens = listOf(
+        Destination.Home,
+        Destination.Preferences,
+    )
+}
+
 object Destination {
 
     data object Create : Screen(
@@ -186,10 +194,12 @@ object Destination {
 
     data object Home : Screen(
         route = HOME_SCREEN_ROUTE,
+        hasBottomBar = true,
     )
 
     data object Preferences : Screen(
         route = PREFERENCES_SCREEN_ROUTE,
+        hasBottomBar = true,
     )
 
     data object About : Screen(
