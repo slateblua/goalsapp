@@ -17,9 +17,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.sharp.Timelapse
-import androidx.compose.material.icons.twotone.AddCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -65,7 +65,7 @@ fun HomeScreen(
                 IconButton(onClick = onAddButton, modifier = Modifier.padding(5.dp)) {
                     Icon(
                         modifier = Modifier.size(30.dp),
-                        imageVector = Icons.TwoTone.AddCircle,
+                        imageVector = Icons.Default.AddCircle,
                         contentDescription = stringResource(R.string.preferences_button_content_description)
                     )
                 }
