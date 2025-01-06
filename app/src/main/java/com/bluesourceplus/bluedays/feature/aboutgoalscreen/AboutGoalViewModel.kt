@@ -26,6 +26,14 @@ sealed interface State {
     ) : State
 }
 
+
+sealed interface Event {
+    data class LoadGoal(
+        val goalId: Int,
+    ) : Event
+}
+
+
 class AboutGoalViewModel : ViewModel(), KoinComponent {
     private val getGoalByIdUseCase: GetGoalByIdUseCase by inject()
 
@@ -35,7 +43,13 @@ class AboutGoalViewModel : ViewModel(), KoinComponent {
         )
     val state = _state.asStateFlow()
 
-    fun loadGoal(goalId: Int) {
+    fun handleEvent(event: Event) {
+        when (event) {
+            is Event.LoadGoal -> loadGoal(event.goalId)
+        }
+    }
+
+    private fun loadGoal(goalId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             val goal = getGoalByIdUseCase(goalId).first()
             _state.update {

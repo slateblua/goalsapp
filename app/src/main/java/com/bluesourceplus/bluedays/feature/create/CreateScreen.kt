@@ -33,10 +33,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.datetime.LocalDate
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import java.util.Locale
 
 @Composable
-fun CreateScreenRoute(createViewModel: CreateViewModel = koinViewModel(), back: () -> Unit) {
+fun CreateScreenRoute(mode: CreateGoalMode, back: () -> Unit) {
+    val createViewModel: CreateViewModel = koinViewModel { parametersOf(mode) }
     CreateScreen(createViewModel, back)
 }
 

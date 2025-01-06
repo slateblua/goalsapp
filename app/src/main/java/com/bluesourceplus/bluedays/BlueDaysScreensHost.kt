@@ -40,6 +40,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.bluesourceplus.bluedays.feature.aboutgoalscreen.AboutGoalRoute
 import com.bluesourceplus.bluedays.feature.aboutscreen.AboutScreenRoute
+import com.bluesourceplus.bluedays.feature.create.CreateGoalMode
 import com.bluesourceplus.bluedays.feature.create.CreateScreenRoute
 import com.bluesourceplus.bluedays.feature.home.HomeScreenRoute
 import com.bluesourceplus.bluedays.feature.preferences.PreferencesScreenRoute
@@ -66,10 +67,13 @@ fun BlueDaysScreensHost(
         }
 
         appScreen(Destination.AboutGoal) { backStackEntry ->
-            backStackEntry.arguments?.getInt(GOAL_ID_ARG)?.let {
+            backStackEntry.arguments?.getInt(GOAL_ID_ARG)?.let { goalId ->
                 AboutGoalRoute(
-                    goalId = it,
-                    back = navController::popBackStack
+                    goalId = goalId,
+                    back = navController::popBackStack,
+                    onEditPressed = {
+                        navController.navigate("$CREATE_SCREEN_ROUTE?$GOAL_ID_ARG=$goalId")
+                    }
                 )
             }
         }
@@ -82,8 +86,14 @@ fun BlueDaysScreensHost(
             AboutScreenRoute()
         }
 
-        appScreen(Destination.Create) {
-            CreateScreenRoute(back = navController::popBackStack)
+        appScreen(Destination.Create) { backStackEntry ->
+            val goalId = backStackEntry.arguments?.getString(GOAL_ID_ARG)
+            val mode = if (goalId != null) {
+                CreateGoalMode.Edit(Integer.parseInt(goalId))
+            } else {
+                CreateGoalMode.Create
+            }
+            CreateScreenRoute(mode = mode, back = navController::popBackStack)
         }
     }
 }
@@ -189,7 +199,14 @@ object ShowNavBarScreens {
 object Destination {
 
     data object Create : Screen(
-        route = CREATE_SCREEN_ROUTE,
+        route = "$CREATE_SCREEN_ROUTE?$GOAL_ID_ARG={$GOAL_ID_ARG}",
+        arguments =
+        listOf(
+            navArgument(GOAL_ID_ARG) {
+                type = NavType.StringType
+                nullable = true
+            },
+        ),
     )
 
     data object Home : Screen(
