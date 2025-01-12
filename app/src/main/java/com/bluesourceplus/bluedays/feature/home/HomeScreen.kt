@@ -45,10 +45,18 @@ import com.bluesourceplus.bluedays.feature.create.customFormat
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun HomeScreenRoute(viewModel: HomeViewModel = koinViewModel(), onAddButton: () -> Unit, onGoalPressed: (Int) -> Unit) {
+fun HomeScreenRoute(
+    viewModel: HomeViewModel = koinViewModel(),
+    onAddButton: () -> Unit,
+    onGoalPressed: (Int) -> Unit
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    HomeScreen(onAddButton = onAddButton, onGoalPressed = onGoalPressed, state = state, onHomeScreenIntent = { viewModel.handleEvent(it) })
+    HomeScreen(
+        onAddButton = onAddButton,
+        onGoalPressed = onGoalPressed,
+        state = state,
+        onHomeScreenIntent = { viewModel.handleEvent(it) })
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,9 +67,11 @@ fun HomeScreen(
     onHomeScreenIntent: (HomeScreenIntent) -> Unit,
     state: HomeScreenState,
 ) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(color = MaterialTheme.colorScheme.background)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.background)
+    ) {
         CenterAlignedTopAppBar(
             title = { Text(text = stringResource(R.string.app_name)) },
             actions = {
@@ -83,7 +93,13 @@ fun HomeScreen(
                             modifier = Modifier.padding(5.dp),
                             goal = goal,
                             onGoalPressed = onGoalPressed,
-                            onLongPressed = { onHomeScreenIntent(HomeScreenIntent.OnMarkedCompleted(it)) }
+                            onLongPressed = {
+                                onHomeScreenIntent(
+                                    HomeScreenIntent.OnMarkedCompleted(
+                                        it
+                                    )
+                                )
+                            }
                         )
                     }
                 }
@@ -158,7 +174,10 @@ fun GoalCard(
                             AnimatedVisibility(
                                 visible = goal.completed
                             ) {
-                                Icon(imageVector = Icons.Default.Check, contentDescription = "Completed goal")
+                                Icon(
+                                    imageVector = Icons.Default.Check,
+                                    contentDescription = "Completed goal"
+                                )
                             }
                         }
                     }
@@ -174,7 +193,10 @@ fun HomeEmptyContent(
     onCreateButtonClicked: () -> Unit,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
-        Column(modifier = modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = modifier.align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(
                 text = "You don't have anything here yet!",
                 color = MaterialTheme.colorScheme.primary,
