@@ -4,7 +4,7 @@ import com.bluesourceplus.bluedays.data.GoalModel
 
 fun GoalModel.toGoalEnt(): GoalEnt {
     return GoalEnt(
-        id = this.id,
+        goalId = this.goalId,
         title = this.title,
         description = this.description,
         dueDate = this.dueDate,
@@ -14,7 +14,7 @@ fun GoalModel.toGoalEnt(): GoalEnt {
 
 fun GoalEnt.toGoalModel(): GoalModel {
     return GoalModel(
-        id = this.id,
+        goalId = this.goalId,
         title = this.title,
         description = this.description,
         dueDate = this.dueDate,

@@ -7,7 +7,7 @@ import kotlinx.datetime.LocalDate
 @Entity
 data class GoalEnt(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val goalId: Int = 0,
     val title: String,
     val description: String,
     val dueDate: LocalDate,
