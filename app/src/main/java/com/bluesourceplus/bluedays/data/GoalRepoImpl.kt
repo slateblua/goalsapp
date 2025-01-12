@@ -9,8 +9,8 @@ class GoalRepoImpl (private val localDataSource: LocalDataSource) : GoalRepo {
         return localDataSource.getAll()
     }
 
-    override fun getById(id: Int): Flow<GoalModel> {
-        return localDataSource.getById(id)
+    override fun getById(goalId: Int): Flow<GoalModel> {
+        return localDataSource.getById(goalId)
     }
 
     override suspend fun update(goalModel: GoalModel) {

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface GoalRepo {
     fun getAll(): Flow<List<GoalModel>>
 
-    fun getById(id: Int): Flow<GoalModel>
+    fun getById(goalId: Int): Flow<GoalModel>
 
     suspend fun update(goalModel: GoalModel)
 
