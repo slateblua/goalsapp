@@ -56,7 +56,8 @@ fun HomeScreenRoute(
         onAddButton = onAddButton,
         onGoalPressed = onGoalPressed,
         state = state,
-        onHomeScreenIntent = { viewModel.handleEvent(it) })
+        onHomeScreenIntent = { viewModel.handleEvent(it) }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
