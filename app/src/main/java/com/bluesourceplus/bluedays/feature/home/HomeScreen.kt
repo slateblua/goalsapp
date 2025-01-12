@@ -1,7 +1,9 @@
 package com.bluesourceplus.bluedays.feature.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.sharp.Timelapse
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -46,7 +48,7 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreenRoute(viewModel: HomeViewModel = koinViewModel(), onAddButton: () -> Unit, onGoalPressed: (Int) -> Unit) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    HomeScreen(onAddButton = onAddButton, onGoalPressed = onGoalPressed, state = state)
+    HomeScreen(onAddButton = onAddButton, onGoalPressed = onGoalPressed, state = state, onHomeScreenIntent = { viewModel.handleEvent(it) })
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,6 +56,7 @@ fun HomeScreenRoute(viewModel: HomeViewModel = koinViewModel(), onAddButton: () 
 fun HomeScreen(
     onAddButton: () -> Unit,
     onGoalPressed: (Int) -> Unit,
+    onHomeScreenIntent: (HomeScreenIntent) -> Unit,
     state: HomeScreenState,
 ) {
     Column(modifier = Modifier
@@ -74,12 +77,13 @@ fun HomeScreen(
         when (state) {
             is HomeScreenState.Content -> {
                 LazyColumn(modifier = Modifier.padding(horizontal = 5.dp)) {
-                    items(state.goals, key = { book -> book.id }) { goal ->
+                    items(state.goals, key = { book -> book.goalId }) { goal ->
                         Spacer(modifier = Modifier.height(15.dp))
                         GoalCard(
                             modifier = Modifier.padding(5.dp),
                             goal = goal,
                             onGoalPressed = onGoalPressed,
+                            onLongPressed = { onHomeScreenIntent(HomeScreenIntent.OnMarkedCompleted(it)) }
                         )
                     }
                 }
@@ -92,16 +96,22 @@ fun HomeScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GoalCard(
     modifier: Modifier = Modifier,
     goal: GoalModel,
     onGoalPressed: (Int) -> Unit,
+    onLongPressed: (GoalModel) -> Unit,
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onGoalPressed(goal.id) },
+            .combinedClickable(onLongClick = {
+                onLongPressed(goal)
+            }) {
+                onGoalPressed(goal.goalId)
+            },
         shape = RoundedCornerShape(16.dp)
     ) {
         Box {
@@ -110,9 +120,9 @@ fun GoalCard(
                     .padding(16.dp)
                     .fillMaxWidth()
             ) {
-                Column(
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
                         text = goal.title,
@@ -120,19 +130,8 @@ fun GoalCard(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = goal.description,
-                        style = MaterialTheme.typography.bodySmall,
-                        maxLines = 3,
-                        overflow = TextOverflow.Ellipsis
-                    )
-
                     Row(
                         modifier = Modifier
-                            .align(Alignment.End)
                             .background(
                                 color = MaterialTheme.colorScheme.surfaceVariant,
                                 shape = RoundedCornerShape(20.dp)
@@ -153,20 +152,17 @@ fun GoalCard(
                                 text = customFormat(goal.dueDate),
                                 style = MaterialTheme.typography.bodyMedium,
                             )
+
+                            Spacer(modifier = Modifier.width(5.dp))
+
+                            AnimatedVisibility(
+                                visible = goal.completed
+                            ) {
+                                Icon(imageVector = Icons.Default.Check, contentDescription = "Completed goal")
+                            }
                         }
                     }
                 }
-            }
-            IconButton(
-                onClick = {
-
-                },
-                modifier = Modifier.align(Alignment.TopEnd)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.MoreVert,
-                    contentDescription = "More options"
-                )
             }
         }
     }
