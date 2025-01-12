@@ -44,7 +44,7 @@ sealed interface CreateGoalIntent {
 
 sealed interface State {
     data class Content(
-        val id: Int = 0,
+        val goalId: Int = 0,
         val title: String = "",
         val description: String = "",
         val dueDate: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault()),
@@ -109,7 +109,7 @@ class CreateViewModel(private val mode: CreateGoalMode) : ViewModel(), KoinCompo
             val goal = getGoalByIdUseCase(goalId).first()
             _state.update {
                 State.Content(
-                    id = goalId,
+                    goalId = goalId,
                     title = goal.title,
                     description = goal.description,
                     dueDate = goal.dueDate,
@@ -124,7 +124,7 @@ class CreateViewModel(private val mode: CreateGoalMode) : ViewModel(), KoinCompo
             val state = _state.value as State.Content
             val goal =
                 GoalModel(
-                    id = state.id,
+                    goalId = state.goalId,
                     title = state.title,
                     description = state.description,
                     dueDate = state.dueDate,
