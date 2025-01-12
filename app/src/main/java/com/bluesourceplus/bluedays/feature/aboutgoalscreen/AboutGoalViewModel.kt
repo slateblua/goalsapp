@@ -19,14 +19,14 @@ import kotlinx.datetime.todayIn
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-sealed interface State {
+sealed interface AboutGoalState {
     data class Content(
         val id: Int = 0,
         val title: String = "",
         val description: String = "",
         val dueDate: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault()),
         val completed: Boolean = false,
-    ) : State
+    ) : AboutGoalState
 }
 
 sealed class AboutGoalEffect {
@@ -49,8 +49,8 @@ class AboutGoalViewModel : ViewModel(), KoinComponent {
     private val deleteGoalUseCase: DeleteGoalUseCase by inject()
 
     private val _state =
-        MutableStateFlow<State>(
-            State.Content()
+        MutableStateFlow<AboutGoalState>(
+            AboutGoalState.Content()
         )
     val state = _state.asStateFlow()
 
@@ -76,7 +76,7 @@ class AboutGoalViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch(Dispatchers.IO) {
             val goal = getGoalByIdUseCase(goalId).first()
             _state.update {
-                State.Content(
+                AboutGoalState.Content(
                     id = goalId,
                     title = goal.title,
                     description = goal.description,

@@ -57,7 +57,7 @@ fun AboutGoalRoute(
 @Composable
 fun AboutGoalScreen(
     goalId: Int,
-    state: State,
+    state: AboutGoalState,
     aboutGoalViewModel: AboutGoalViewModel,
     back: () -> Unit,
     onEditPressed: (Int) -> Unit,
@@ -95,7 +95,7 @@ fun AboutGoalScreen(
         }
 
         when (state) {
-            is State.Content -> {
+            is AboutGoalState.Content -> {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
