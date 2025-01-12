@@ -1,11 +1,13 @@
 package com.bluesourceplus.bluedays.feature.aboutgoalscreen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -18,6 +20,7 @@ import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.FlashOn
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -96,13 +99,9 @@ fun AboutGoalScreen(
 
         when (state) {
             is AboutGoalState.Content -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(20.dp)
-                ) {
-                    Column {
-                        Row {
+                Column(modifier = Modifier.padding(10.dp)) {
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        Row(modifier = Modifier.padding(10.dp)) {
                             Icon(
                                 imageVector = Icons.Outlined.FlashOn,
                                 contentDescription = "Goal Icon"
@@ -110,8 +109,14 @@ fun AboutGoalScreen(
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(text = state.title)
                         }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Row {
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Row(modifier = Modifier.padding(10.dp)) {
                             Icon(
                                 imageVector = Icons.Outlined.Description,
                                 contentDescription = "Calendar Icon"
@@ -119,8 +124,14 @@ fun AboutGoalScreen(
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(text = state.description)
                         }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Row {
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Row(modifier = Modifier.padding(10.dp)) {
                             Icon(
                                 imageVector = Icons.Outlined.CalendarMonth,
                                 contentDescription = "Calendar Icon"
@@ -129,9 +140,12 @@ fun AboutGoalScreen(
                             Text(text = customFormat(state.dueDate))
                         }
                     }
-                    Row(modifier = Modifier.align(Alignment.BottomCenter)) {
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
                         Button(
-                            modifier = Modifier.width(140.dp),
+                            modifier = Modifier.weight(0.5f),
                             shape = RoundedCornerShape(10.dp),
                             onClick = { onEditPressed(state.id) },
                         ) {
@@ -143,7 +157,7 @@ fun AboutGoalScreen(
                         }
                         Spacer(modifier = Modifier.width(10.dp))
                         Button(
-                            modifier = Modifier.width(140.dp),
+                            modifier = Modifier.weight(0.5f),
                             shape = RoundedCornerShape(10.dp),
                             onClick = { onAboutGoalIntent(AboutGoalIntent.DeleteGoal(state.id)) }
                         ) {
