@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -14,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.FlashOn
@@ -44,63 +44,115 @@ fun AboutGoalRoute(
     val state by aboutGoalViewModel.state.collectAsStateWithLifecycle()
 
     AboutGoalScreen(
+        goalId = goalId,
         state = state,
         aboutGoalViewModel = aboutGoalViewModel,
-        goalId = goalId,
         back = back,
-        onEditPressed = onEditPressed
+        onEditPressed = onEditPressed,
+        onAboutGoalIntent = { aboutGoalViewModel.handleEvent(it) },
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutGoalScreen(state: State, aboutGoalViewModel: AboutGoalViewModel, goalId: Int, back: () -> Unit, onEditPressed: (Int) -> Unit) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(color = MaterialTheme.colorScheme.background)) {
+fun AboutGoalScreen(
+    goalId: Int,
+    state: State,
+    aboutGoalViewModel: AboutGoalViewModel,
+    back: () -> Unit,
+    onEditPressed: (Int) -> Unit,
+    onAboutGoalIntent: (AboutGoalIntent) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.background)
+    ) {
         CenterAlignedTopAppBar(
-            title = { Text(text = "About goal")},
+            title = { Text(text = "About goal") },
             navigationIcon = {
                 IconButton(onClick = back) {
-                    Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
                 }
             },
         )
 
         LaunchedEffect(Unit) {
-            aboutGoalViewModel.handleEvent(Event.LoadGoal(goalId))
+            aboutGoalViewModel.handleEvent(AboutGoalIntent.LoadGoal(goalId))
+        }
+
+        LaunchedEffect(Unit) {
+            aboutGoalViewModel.sideEffect.collect { effect ->
+                when (effect) {
+                    AboutGoalEffect.GoalDeleted -> {
+                        back()
+                    }
+                }
+            }
         }
 
         when (state) {
             is State.Content -> {
-                Box(modifier = Modifier.fillMaxSize().padding(20.dp)) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(20.dp)
+                ) {
                     Column {
                         Row {
-                            Icon(imageVector = Icons.Outlined.FlashOn, contentDescription = "Goal Icon")
+                            Icon(
+                                imageVector = Icons.Outlined.FlashOn,
+                                contentDescription = "Goal Icon"
+                            )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(text = state.title)
                         }
                         Spacer(modifier = Modifier.height(10.dp))
                         Row {
-                            Icon(imageVector = Icons.Outlined.Description, contentDescription = "Calendar Icon")
+                            Icon(
+                                imageVector = Icons.Outlined.Description,
+                                contentDescription = "Calendar Icon"
+                            )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(text = state.description)
                         }
                         Spacer(modifier = Modifier.height(10.dp))
                         Row {
-                            Icon(imageVector = Icons.Outlined.CalendarMonth, contentDescription = "Calendar Icon")
+                            Icon(
+                                imageVector = Icons.Outlined.CalendarMonth,
+                                contentDescription = "Calendar Icon"
+                            )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(text = customFormat(state.dueDate))
                         }
                     }
-                    Button(
-                        modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth(),
-                        shape = RoundedCornerShape(10.dp),
-                        onClick = { onEditPressed(state.id) },
-                    ) {
-                        Icon(imageVector = Icons.Outlined.Edit, contentDescription = "Edit Icon")
-                        Spacer(modifier = Modifier.width(3.dp))
-                        Text(text = "Edit")
+                    Row(modifier = Modifier.align(Alignment.BottomCenter)) {
+                        Button(
+                            modifier = Modifier.width(140.dp),
+                            shape = RoundedCornerShape(10.dp),
+                            onClick = { onEditPressed(state.id) },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Edit,
+                                contentDescription = "Edit Icon"
+                            )
+                            Spacer(modifier = Modifier.width(3.dp))
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Button(
+                            modifier = Modifier.width(140.dp),
+                            shape = RoundedCornerShape(10.dp),
+                            onClick = { onAboutGoalIntent(AboutGoalIntent.DeleteGoal(state.id)) }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.DeleteOutline,
+                                contentDescription = "Delete Icon"
+                            )
+                            Spacer(modifier = Modifier.width(3.dp))
+                        }
                     }
                 }
             }

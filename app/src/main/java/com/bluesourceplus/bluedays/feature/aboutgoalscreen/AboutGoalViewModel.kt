@@ -2,11 +2,14 @@ package com.bluesourceplus.bluedays.feature.aboutgoalscreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bluesourceplus.bluedays.feature.aboutgoalscreen.usecases.DeleteGoalUseCase
 import com.bluesourceplus.bluedays.feature.aboutgoalscreen.usecases.GetGoalByIdUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
@@ -26,16 +29,24 @@ sealed interface State {
     ) : State
 }
 
+sealed class AboutGoalEffect {
+    data object GoalDeleted : AboutGoalEffect()
+}
 
-sealed interface Event {
+sealed interface AboutGoalIntent {
     data class LoadGoal(
         val goalId: Int,
-    ) : Event
+    ) : AboutGoalIntent
+
+    data class DeleteGoal(
+        val id: Int,
+    ) : AboutGoalIntent
 }
 
 
 class AboutGoalViewModel : ViewModel(), KoinComponent {
     private val getGoalByIdUseCase: GetGoalByIdUseCase by inject()
+    private val deleteGoalUseCase: DeleteGoalUseCase by inject()
 
     private val _state =
         MutableStateFlow<State>(
@@ -43,9 +54,21 @@ class AboutGoalViewModel : ViewModel(), KoinComponent {
         )
     val state = _state.asStateFlow()
 
-    fun handleEvent(event: Event) {
+    private val _sideEffect = Channel<AboutGoalEffect>()
+    val sideEffect = _sideEffect.receiveAsFlow()
+
+    fun handleEvent(event: AboutGoalIntent) {
         when (event) {
-            is Event.LoadGoal -> loadGoal(event.goalId)
+            is AboutGoalIntent.LoadGoal -> loadGoal(event.goalId)
+            is AboutGoalIntent.DeleteGoal -> deleteGoal(goalId = event.id)
+        }
+    }
+
+    private fun deleteGoal(goalId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val goal = getGoalByIdUseCase(goalId)
+            deleteGoalUseCase(goal.first())
+            _sideEffect.send(AboutGoalEffect.GoalDeleted)
         }
     }
 
