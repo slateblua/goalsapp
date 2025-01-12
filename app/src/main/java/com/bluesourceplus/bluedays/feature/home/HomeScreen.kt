@@ -54,7 +54,7 @@ fun HomeScreenRoute(viewModel: HomeViewModel = koinViewModel(), onAddButton: () 
 fun HomeScreen(
     onAddButton: () -> Unit,
     onGoalPressed: (Int) -> Unit,
-    state: State,
+    state: HomeScreenState,
 ) {
     Column(modifier = Modifier
         .fillMaxSize()
@@ -72,7 +72,7 @@ fun HomeScreen(
             }
         )
         when (state) {
-            is State.Content -> {
+            is HomeScreenState.Content -> {
                 LazyColumn(modifier = Modifier.padding(horizontal = 5.dp)) {
                     items(state.goals, key = { book -> book.id }) { goal ->
                         Spacer(modifier = Modifier.height(15.dp))
@@ -85,7 +85,7 @@ fun HomeScreen(
                 }
             }
 
-            State.Empty -> {
+            HomeScreenState.Empty -> {
                 HomeEmptyContent(onCreateButtonClicked = onAddButton)
             }
         }

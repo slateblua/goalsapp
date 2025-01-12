@@ -14,18 +14,18 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-sealed interface State {
-    data object Empty : State
+sealed interface HomeScreenState {
+    data object Empty : HomeScreenState
 
     data class Content(
         val goals: List<GoalModel>,
-    ) : State
+    ) : HomeScreenState
 }
 
-sealed interface Event {
+sealed interface HomeScreenIntent {
     data class OnMarkedCompleted(
         val goalModel: GoalModel,
-    ) : Event
+    ) : HomeScreenIntent
 }
 
 class HomeViewModel : ViewModel(), KoinComponent {
@@ -35,23 +35,23 @@ class HomeViewModel : ViewModel(), KoinComponent {
 
     private val goals = getAllNotesUseCase()
 
-    val state: StateFlow<State> =
+    val state: StateFlow<HomeScreenState> =
         goals
             .map { goals ->
                 if (goals.isNotEmpty()) {
-                    State.Content(goals)
+                    HomeScreenState.Content(goals)
                 } else {
-                    State.Empty
+                    HomeScreenState.Empty
                 }
             }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = State.Empty,
+                initialValue = HomeScreenState.Empty,
             )
 
-    fun handleEvent(event: Event) {
+    fun handleEvent(event: HomeScreenIntent) {
         when (event) {
-            is Event.OnMarkedCompleted -> markCompleted(event.goalModel)
+            is HomeScreenIntent.OnMarkedCompleted -> markCompleted(event.goalModel)
         }
     }
 
