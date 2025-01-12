@@ -57,10 +57,10 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
     LaunchedEffect(Unit) {
         createViewModel.sideEffect.collect { effect ->
             when (effect) {
-                Effect.TaskSaved -> {
+                CreateGoalEffect.GoalSaved -> {
                     // empty for now
                 }
-                Effect.NavigateUp -> {
+                CreateGoalEffect.NavigateUp -> {
                     back()
                 }
             }
@@ -79,7 +79,7 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
                     if ((state as State.Content).title.isEmpty()) {
                         canBeCreated = false
                     } else {
-                        createViewModel.handleEvent(Event.OnSaveClicked)
+                        createViewModel.handleEvent(CreateGoalIntent.OnSaveClicked)
                     }
                 }) {
                     Icon(imageVector = Icons.Default.Check, contentDescription = "Save")
@@ -92,7 +92,7 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 value = (state as State.Content).title,
                 onValueChange = {
-                    createViewModel.handleEvent(Event.OnTitleChanged(it))
+                    createViewModel.handleEvent(CreateGoalIntent.OnTitleChanged(it))
                 },
                 singleLine = true
             )
@@ -104,7 +104,7 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
                 modifier = Modifier.fillMaxWidth().height(120.dp),
                 value = (state as State.Content).description,
                 onValueChange = {
-                    createViewModel.handleEvent(Event.OnDescriptionChanged(it))
+                    createViewModel.handleEvent(CreateGoalIntent.OnDescriptionChanged(it))
                 },
                 singleLine = false
             )
@@ -134,7 +134,7 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
                         Button(onClick = {
                             shouldShowDate = false
                             selectedDate?.let {
-                                createViewModel.handleEvent(Event.OnDueDateChanged(dueDate = selectedDate))
+                                createViewModel.handleEvent(CreateGoalIntent.OnDueDateChanged(dueDate = selectedDate))
                             }
                         }, shape = RoundedCornerShape(20.dp)) {
                             Text(text = "Ok")

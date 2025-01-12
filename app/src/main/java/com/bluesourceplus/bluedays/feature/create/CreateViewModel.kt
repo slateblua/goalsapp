@@ -26,20 +26,20 @@ sealed class CreateGoalMode {
     data class Edit(val goalId: Int) : CreateGoalMode()
 }
 
-sealed interface Event {
+sealed interface CreateGoalIntent {
     data class OnTitleChanged(
         val title: String,
-    ) : Event
+    ) : CreateGoalIntent
 
     data class OnDescriptionChanged(
         val description: String,
-    ) : Event
+    ) : CreateGoalIntent
 
     data class OnDueDateChanged(
         val dueDate: LocalDate,
-    ) : Event
+    ) : CreateGoalIntent
 
-    data object OnSaveClicked : Event
+    data object OnSaveClicked : CreateGoalIntent
 }
 
 sealed interface State {
@@ -52,9 +52,9 @@ sealed interface State {
     ) : State
 }
 
-sealed class Effect {
-    data object TaskSaved : Effect()
-    data object NavigateUp : Effect()
+sealed class CreateGoalEffect {
+    data object GoalSaved : CreateGoalEffect()
+    data object NavigateUp : CreateGoalEffect()
 }
 
 class CreateViewModel(private val mode: CreateGoalMode) : ViewModel(), KoinComponent {
@@ -68,7 +68,7 @@ class CreateViewModel(private val mode: CreateGoalMode) : ViewModel(), KoinCompo
         }
     }
 
-    private val _sideEffect = Channel<Effect>()
+    private val _sideEffect = Channel<CreateGoalEffect>()
     val sideEffect = _sideEffect.receiveAsFlow()
 
     private val _state =
@@ -77,12 +77,12 @@ class CreateViewModel(private val mode: CreateGoalMode) : ViewModel(), KoinCompo
         )
     val state = _state.asStateFlow()
 
-    fun handleEvent(event: Event) {
+    fun handleEvent(event: CreateGoalIntent) {
         when (event) {
-            is Event.OnTitleChanged -> setTitle(event.title)
-            is Event.OnDescriptionChanged -> setDescription(event.description)
-            is Event.OnSaveClicked -> addOrUpdateGoal()
-            is Event.OnDueDateChanged -> setDueDate(event.dueDate)
+            is CreateGoalIntent.OnTitleChanged -> setTitle(event.title)
+            is CreateGoalIntent.OnDescriptionChanged -> setDescription(event.description)
+            is CreateGoalIntent.OnSaveClicked -> addOrUpdateGoal()
+            is CreateGoalIntent.OnDueDateChanged -> setDueDate(event.dueDate)
         }
     }
 
@@ -137,8 +137,8 @@ class CreateViewModel(private val mode: CreateGoalMode) : ViewModel(), KoinCompo
                 addGoalUseCase(goal)
             }
 
-            _sideEffect.send(Effect.TaskSaved)
-            _sideEffect.send(Effect.NavigateUp)
+            _sideEffect.send(CreateGoalEffect.GoalSaved)
+            _sideEffect.send(CreateGoalEffect.NavigateUp)
         }
     }
 }
