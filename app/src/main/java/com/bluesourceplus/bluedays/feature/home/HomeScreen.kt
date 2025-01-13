@@ -150,7 +150,7 @@ fun GoalCard(
                     Row(
                         modifier = Modifier
                             .background(
-                                color = if (goal.completed) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+                                color = MaterialTheme.colorScheme.surfaceBright,
                                 shape = RoundedCornerShape(20.dp)
                             )
                     ) {
