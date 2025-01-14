@@ -13,10 +13,10 @@ import org.koin.dsl.module
 const val DATABASE_NAME = "goal-database"
 
 val dataModule = module {
-    // Provides BookDao (assuming it's the correct name)
+    // Provides GoalDao
     single { get<GoalDatabase>().getGoalDao() }
 
-    // Provides BluereaderDatabase (Singleton)
+    // Provides GoalDatabase (Singleton)
     single {
         Room.databaseBuilder(
             androidContext(),
@@ -29,6 +29,6 @@ val dataModule = module {
     // Binds RoomLocalDataSource to LocalDataSource
     single { RoomLocalDataSource(get()) } bind LocalDataSource::class
 
-    // Binds LocalDataSourceRepositoryImpl to LocalDataSourceRepository
+    // Binds GoalRepoImpl to GoalRepo
     single { GoalRepoImpl(get()) } bind GoalRepo::class
 }
