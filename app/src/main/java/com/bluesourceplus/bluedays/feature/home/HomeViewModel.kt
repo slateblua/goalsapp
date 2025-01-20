@@ -29,11 +29,11 @@ sealed interface HomeScreenIntent {
 }
 
 class HomeViewModel : ViewModel(), KoinComponent {
-    private val getAllNotesUseCase: GetAllGoalsUseCase by inject()
+    private val getAllGoalsUseCase: GetAllGoalsUseCase by inject()
 
     private val updateGoalUseCase: UpdateGoalUseCaseImpl by inject()
 
-    private val goals = getAllNotesUseCase()
+    private val goals = getAllGoalsUseCase()
 
     val state: StateFlow<HomeScreenState> =
         goals
