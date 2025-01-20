@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.bluesourceplus.bluedays.composables.BluedaysTheme
+import com.bluesourceplus.bluedays.composables.theme.BluedaysTheme
 import org.koin.compose.KoinContext
 
 class BlueDays : ComponentActivity() {
