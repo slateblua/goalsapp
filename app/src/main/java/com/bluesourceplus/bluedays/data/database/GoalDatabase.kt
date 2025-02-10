@@ -14,12 +14,12 @@ abstract class GoalDatabase : RoomDatabase() {
 
 class LocalDateConverters {
     @TypeConverter
-    fun fromString(value: String): LocalDate {
-        return LocalDate.parse(value)
+    fun fromLong(value: Long): LocalDate {
+        return LocalDate.fromEpochDays(value.toInt())
     }
 
     @TypeConverter
-    fun toString(localDate: LocalDate): String {
-        return localDate.toString()
+    fun toLong(value: LocalDate): Long {
+        return value.toEpochDays().toLong()
     }
 }
