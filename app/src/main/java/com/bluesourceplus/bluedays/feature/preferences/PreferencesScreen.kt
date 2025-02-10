@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -19,18 +18,17 @@ import androidx.compose.ui.Modifier
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun PreferencesScreenRoute(preferencesViewModel: PreferencesViewModel = koinViewModel(), back: () -> Unit, onAbout: () -> Unit) {
+fun PreferencesScreenRoute(preferencesViewModel: PreferencesViewModel = koinViewModel(), back: () -> Unit) {
     PreferencesScreen(
         preferencesViewModel = preferencesViewModel,
         back = back,
-        onAbout = onAbout
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Suppress("unused")
-fun PreferencesScreen(preferencesViewModel: PreferencesViewModel, back: () -> Unit, onAbout: () -> Unit) {
+fun PreferencesScreen(preferencesViewModel: PreferencesViewModel, back: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.background)) {
         CenterAlignedTopAppBar(
             title = { Text(text = "Preferences")},
@@ -39,11 +37,6 @@ fun PreferencesScreen(preferencesViewModel: PreferencesViewModel, back: () -> Un
                     Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                 }
             },
-            actions = {
-                IconButton(onClick = onAbout) {
-                    Icon(imageVector = Icons.Filled.Info, contentDescription = "Back")
-                }
-            }
         )
     }
     Box(modifier = Modifier.fillMaxSize()) {

@@ -39,7 +39,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.bluesourceplus.bluedays.feature.aboutgoalscreen.AboutGoalRoute
-import com.bluesourceplus.bluedays.feature.aboutscreen.AboutScreenRoute
 import com.bluesourceplus.bluedays.feature.create.CreateGoalMode
 import com.bluesourceplus.bluedays.feature.create.CreateScreenRoute
 import com.bluesourceplus.bluedays.feature.home.HomeScreenRoute
@@ -79,11 +78,7 @@ fun BlueDaysScreensHost(
         }
 
         appScreen(Destination.Preferences) {
-            PreferencesScreenRoute(back = navController::popBackStack, onAbout = { navController.navigate(ABOUT_SCREEN_ROUTE)})
-        }
-
-        appScreen(Destination.About) {
-            AboutScreenRoute()
+            PreferencesScreenRoute(back = navController::popBackStack)
         }
 
         appScreen(Destination.Create) { backStackEntry ->
@@ -217,10 +212,6 @@ object Destination {
     data object Preferences : Screen(
         route = PREFERENCES_SCREEN_ROUTE,
         hasBottomBar = true,
-    )
-
-    data object About : Screen(
-        route = ABOUT_SCREEN_ROUTE,
     )
 
     data object AboutGoal : Screen(
