@@ -180,7 +180,6 @@ const val CREATE_SCREEN_ROUTE = "create"
 const val HOME_SCREEN_ROUTE = "home"
 const val PREFERENCES_SCREEN_ROUTE = "preferences"
 
-const val ABOUT_SCREEN_ROUTE = "about"
 const val ABOUT_GOAL_SCREEN_ROUTE = "about_goal"
 const val GOAL_ID_ARG = "goal_id"
 
