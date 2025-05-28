@@ -2,7 +2,6 @@ package com.bluesourceplus.bluedays.feature.aboutgoalscreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,14 +13,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.DeleteOutline
-import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.FlashOn
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,7 +26,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -68,7 +63,6 @@ fun AboutGoalScreen(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
             .background(color = MaterialTheme.colorScheme.background)
     ) {
         CenterAlignedTopAppBar(
@@ -99,73 +93,68 @@ fun AboutGoalScreen(
 
         when (state) {
             is AboutGoalState.Content -> {
-                Column(modifier = Modifier.padding(10.dp)) {
-                    Card(modifier = Modifier.fillMaxWidth()) {
-                        Row(modifier = Modifier.padding(10.dp)) {
-                            Icon(
-                                imageVector = Icons.Outlined.FlashOn,
-                                contentDescription = "Goal Icon"
-                            )
-                            Spacer(modifier = Modifier.width(10.dp))
+                Column(
+                    modifier = Modifier
+                        .padding(start = 10.dp, top = 25.dp, end = 20.dp, bottom = 30.dp)
+                        .fillMaxSize()
+                ) {
+                    ElevatedCard(
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Column(modifier = Modifier.padding(10.dp)) {
+                            Text(text = "Title", style = MaterialTheme.typography.titleLarge)
+                            Spacer(modifier = Modifier.width(15.dp))
                             Text(text = state.title)
                         }
                     }
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
+                    ElevatedCard(
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Row(modifier = Modifier.padding(10.dp)) {
-                            Icon(
-                                imageVector = Icons.Outlined.Description,
-                                contentDescription = "Calendar Icon"
-                            )
-                            Spacer(modifier = Modifier.width(10.dp))
+                        Column(modifier = Modifier.padding(10.dp)) {
+                            Text(text = "Description", style = MaterialTheme.typography.titleLarge)
+                            Spacer(modifier = Modifier.width(15.dp))
                             Text(text = state.description)
                         }
                     }
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
+                    ElevatedCard(
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Row(modifier = Modifier.padding(10.dp)) {
-                            Icon(
-                                imageVector = Icons.Outlined.CalendarMonth,
-                                contentDescription = "Calendar Icon"
-                            )
-                            Spacer(modifier = Modifier.width(10.dp))
+                        Column(modifier = Modifier.padding(10.dp)) {
+                            Text(text = "Due Date", style = MaterialTheme.typography.titleLarge)
+                            Spacer(modifier = Modifier.width(15.dp))
                             Text(text = customFormat(state.dueDate))
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                        Button(
-                            modifier = Modifier.weight(0.5f),
-                            shape = RoundedCornerShape(10.dp),
-                            onClick = { onEditPressed(state.id) },
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Edit,
-                                contentDescription = "Edit Icon"
-                            )
-                            Spacer(modifier = Modifier.width(3.dp))
-                        }
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Button(
-                            modifier = Modifier.weight(0.5f),
-                            shape = RoundedCornerShape(10.dp),
-                            onClick = { onAboutGoalIntent(AboutGoalIntent.DeleteGoal(state.id)) }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.DeleteOutline,
-                                contentDescription = "Delete Icon"
-                            )
-                            Spacer(modifier = Modifier.width(3.dp))
+                    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom) {
+                        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                            Button(
+                                modifier = Modifier.weight(0.5f).height(50.dp),
+                                shape = RoundedCornerShape(15.dp),
+                                onClick = { onEditPressed(state.id) },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Edit,
+                                    contentDescription = "Edit Icon"
+                                )
+                                Spacer(modifier = Modifier.width(3.dp))
+                            }
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Button(
+                                modifier = Modifier.weight(0.5f).height(50.dp),
+                                shape = RoundedCornerShape(15.dp),
+                                onClick = { onAboutGoalIntent(AboutGoalIntent.DeleteGoal(state.id)) }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.DeleteOutline,
+                                    contentDescription = "Delete Icon"
+                                )
+                                Spacer(modifier = Modifier.width(3.dp))
+                            }
                         }
                     }
                 }
