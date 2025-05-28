@@ -72,7 +72,7 @@ fun AboutGoalScreen(
             .background(color = MaterialTheme.colorScheme.background)
     ) {
         CenterAlignedTopAppBar(
-            title = { Text(text = "About goal") },
+            title = { Text(text = "About task") },
             navigationIcon = {
                 IconButton(onClick = back) {
                     Icon(
