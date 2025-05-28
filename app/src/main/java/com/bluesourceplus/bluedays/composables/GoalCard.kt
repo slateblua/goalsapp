@@ -4,12 +4,12 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -49,55 +49,61 @@ fun GoalCard(
         Box {
             Column(
                 modifier = Modifier
-                    .padding(16.dp)
                     .fillMaxWidth()
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
                 ) {
                     Text(
                         text = goal.title,
                         style = MaterialTheme.typography.headlineSmall,
-                        maxLines = 1,
+                        maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                     )
-                    Row(
-                        modifier = Modifier
-                            .background(
-                                color = MaterialTheme.colorScheme.surfaceBright,
-                                shape = RoundedCornerShape(20.dp)
-                            )
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = Icons.Sharp.Timelapse,
-                                contentDescription = "Timer icon"
-                            )
-
-                            Spacer(modifier = Modifier.width(5.dp))
-
-                            Text(
-                                text = customFormat(goal.dueDate),
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
-
-                            Spacer(modifier = Modifier.width(5.dp))
-
-                            AnimatedVisibility(
-                                visible = goal.completed
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Check,
-                                    contentDescription = "Completed goal"
-                                )
-                            }
-                        }
-                    }
+                    Spacer(modifier = Modifier.height(20.dp))
+                    DueDateBadge(goal = goal)
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun DueDateBadge (goal: GoalModel) {
+    Row(
+        modifier = Modifier
+            .background(
+                color = MaterialTheme.colorScheme.surfaceBright,
+                shape = RoundedCornerShape(20.dp)
+            )
+    ) {
+        Row(
+            modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Sharp.Timelapse,
+                contentDescription = "Timer icon"
+            )
+
+            Spacer(modifier = Modifier.width(5.dp))
+
+            Text(
+                text = customFormat(goal.dueDate),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+
+            Spacer(modifier = Modifier.width(5.dp))
+
+            AnimatedVisibility(
+                visible = goal.completed
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = "Completed goal"
+                )
             }
         }
     }
