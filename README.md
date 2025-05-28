@@ -4,7 +4,7 @@ BlueDays is a sample goal-tracking Android app demonstrating the use of Jetpack 
 
 ## Features
 - Create, edit, and delete goals
-- Track progress and completion status
+- Track completion status
 - Set due dates for each goal
 - Modern Material 3 UI
 
@@ -17,7 +17,7 @@ Below is a preview of the app interface:
 ### Build & Run
 1. Clone this repository:
    ```sh
-   git clone https://github.com/yourusername/bluedays.git
+   git clone https://github.com/slateblua/bluedays.git
    ```
 2. Open the project in Android Studio.
 3. Click **Run** to build and launch the app on your device or emulator.
