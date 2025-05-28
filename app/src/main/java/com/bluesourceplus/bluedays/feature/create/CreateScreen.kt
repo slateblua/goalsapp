@@ -88,7 +88,7 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
         )
         Column (modifier = Modifier.fillMaxWidth().padding(20.dp)) {
             OutlinedTextField(
-                placeholder = { Text("A measurable, reachable goal") },
+                placeholder = { Text("Task name") },
                 modifier = Modifier.fillMaxWidth(),
                 value = (state as State.Content).title,
                 onValueChange = {
@@ -100,7 +100,7 @@ fun CreateScreen(createViewModel: CreateViewModel, back: () -> Unit) {
             Spacer(modifier = Modifier.height(20.dp))
 
             OutlinedTextField(
-                placeholder = { Text("Why do you want to achieve it?") },
+                placeholder = { Text("Extended task description") },
                 modifier = Modifier.fillMaxWidth().height(120.dp),
                 value = (state as State.Content).description,
                 onValueChange = {
